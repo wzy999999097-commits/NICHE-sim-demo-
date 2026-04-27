@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="app.title">Family ABM Dashboard</title>
+<link href="/static/css/style.css" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+</head>
+<body>
+<header>
+  <span class="logo" data-i18n="app.logo">Family ABM</span>
+  <nav class="tabs" id="tabNav">
+    <button data-tab="setup"  class="active" data-i18n="tab.setup">Setup</button>
+    <button data-tab="charts" data-i18n="tab.charts">Charts</button>
+    <button data-tab="fitting" data-i18n="tab.fitting">Fitting</button>
+    <button data-tab="network" data-i18n="tab.network">Network</button>
+  </nav>
+  <div class="header-right">
+    <span class="status"><span class="dot" id="statusDot"></span><span id="statusText" data-i18n="status.ready">Ready</span></span>
+    <div class="lang-switch" id="langSwitch">
+      <button class="lang-btn" id="langBtn" title="Settings">⚙</button>
+      <div class="lang-drop" id="langDrop">
+        <div class="lang-item" data-lang="en" id="langEn">English</div>
+        <div class="lang-item" data-lang="zh" id="langZh">简体中文</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ═══ SETUP TAB ═══ -->
+  <section class="tab-content active" id="tab-setup">
+    <div class="card">
+      <div class="card-header"><h2 data-i18n="setup.title">Simulation Setup</h2></div>
+      <div class="config-panel" id="familyConfigs"></div>
+      <div class="form-row" style="margin-top:16px">
+        <div class="form-group">
+          <label data-i18n="setup.steps">Steps</label>
+          <input type="number" id="simSteps" value="120" min="10" max="5000">
+        </div>
+        <div class="form-group">
+          <label>&nbsp;</label>
+          <button class="btn btn-primary" data-i18n="setup.run" onclick="runSimulation()">Run Simulation</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Parameter Controls -->
+    <div class="card" id="paramsCard">
+      <div class="card-header">
+        <h2 data-i18n="setup.params">Parameters</h2>
+        <button class="btn btn-secondary" style="font-size:.8rem;padding:5px 12px" data-i18n="setup.reset_params" onclick="resetParams()">Reset Defaults</button>
+      </div>
+      <div id="paramGroups"></div>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none">
+      <div class="card-header"><h2 data-i18n="setup.results">Results</h2></div>
+      <div class="result-grid" id="resultKPIs"></div>
+    </div>
+    <div class="card" id="agentSelectCard" style="display:none">
+      <div class="card-header"><h2 data-i18n="setup.agents">Agents</h2></div>
+      <div class="agents-list" id="agentsList"></div>
+    </div>
+  </section>
+
+  <!-- ═══ CHARTS TAB ═══ -->
+  <section class="tab-content" id="tab-charts">
+    <div id="chartWarning" class="loading" data-i18n="charts.warn">Run a simulation first to see charts.</div>
+    <div class="card" id="timeseriesCard" style="display:none">
+      <div class="card-header"><h2 data-i18n="charts.timeseries">Time Series</h2></div>
+      <div class="chart-container" id="chartTimeSeries"></div>
+    </div>
+    <div class="card" id="nicheCard" style="display:none">
+      <div class="card-header"><h2 data-i18n="charts.niche">Niche Space</h2></div>
+      <div class="chart-container" id="chartNiche"></div>
+    </div>
+  </section>
+
+  <!-- ═══ FITTING TAB ═══ -->
+  <section class="tab-content" id="tab-fitting">
+    <div id="fitWarning" class="loading" data-i18n="fitting.warn">Run a simulation first, then select a model to fit.</div>
+    <div class="card" id="fitControlCard" style="display:none">
+      <div class="card-header"><h2 data-i18n="fitting.title">ODE Model Fitting (Lanchester-type)</h2></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label data-i18n="fitting.model">Model</label>
+          <select id="fitModel">{% for m in models %}<option value="{{m}}">{{m}}</option>{% endfor %}</select>
+        </div>
+        <div class="form-group">
+          <label data-i18n="fitting.agent">Agent (empty = aggregate)</label>
+          <select id="fitAgent"><option value="" data-i18n="fitting.aggregate">— Aggregate —</option></select>
+        </div>
+        <div class="form-group">
+          <label>&nbsp;</label>
+          <button class="btn btn-primary" data-i18n="fitting.run" onclick="runFitting()">Fit Model</button>
+        </div>
+      </div>
+    </div>
+    <div class="card" id="fitResultCard" style="display:none">
+      <div class="card-header"><h2 data-i18n="fitting.result">Fit Result</h2></div>
+      <div class="result-grid" id="fitKPIs"></div>
+      <div class="fit-params" id="fitParams"></div>
+    </div>
+    <div class="card" id="fitChartCard" style="display:none">
+      <div class="card-header"><h2 data-i18n="fitting.chart">ABM Data vs ODE Fit</h2></div>
+      <div class="chart-container" id="chartFit"></div>
+    </div>
+  </section>
+
+  <!-- ═══ NETWORK TAB ═══ -->
+  <section class="tab-content" id="tab-network">
+    <div id="netWarning" class="loading" data-i18n="network.warn">Run a simulation first to see family networks.</div>
+    <div id="networkCards"></div>
+  </section>
+</div>
+
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>
