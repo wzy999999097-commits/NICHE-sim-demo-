@@ -50,6 +50,7 @@ python -m family_abm.web
 | **Network（网络）** | 家庭关系网络图（情感、信任、冲突可视化）。|
 
 右上角 ⚙ 按钮切换 **English / 简体中文**。
+<img width="2531" height="1264" alt="image" src="https://github.com/user-attachments/assets/d9c9b193-79bd-4528-a2a1-df1b5b90dbc5" />
 
 ### Python API
 
@@ -152,6 +153,3 @@ fastapi, uvicorn, jinja2
 
 ---
 
-## 许可证
-
-MIT
